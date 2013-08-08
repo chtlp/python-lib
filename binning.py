@@ -1,4 +1,5 @@
-from pylab import *
+from ipdb import set_trace
+Debug = False
 
 '''
 bin_info: x_min, x_max, bins
@@ -30,14 +31,23 @@ def binning_xy(x, bin_info, ys):
         count_x[i] = sum(bin_x == i)
 
     values = []
+    std_values = []
 
     for y in ys:
         vy = zeros(bins)
+        std_y = zeros(bins)
         for i in range(bins):
             vy[i] = mean(y[bin_x == i])
-        values.append(vy)
+            if Debug:
+                z = y[bin_x == i]
+                r = randint(0, 2, size(z)) == 1
+                print len(r), mean(z[r]), mean(z[~r])
 
-    return centers, count_x, values
+            std_y[i] = std(y[bin_x == i]) / sqrt(sum(bin_x == i))
+        values.append(vy)
+        std_values.append(std_y)
+
+    return centers, count_x, values, std_values
 
 
 '''
