@@ -1,4 +1,5 @@
 from ipdb import set_trace
+from numpy import *
 Debug = False
 
 '''
