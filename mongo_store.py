@@ -6,11 +6,10 @@ class MongoStore(object):
     A simple persistent hashtable-style storage backed up Mongo DB
     """
 
-    def __init__(self, collection, hostname='localhost', port=27017,
+    def __init__(self, collection, host='localhost', port=27017,
                  db='python-mongo-store'):
 
-        self.client = MongoClient()
-        self.client = MongoClient('localhost', 27017)
+        self.client = MongoClient(host, 27017)
 
         # get a database
         self.db = self.client[db]
@@ -19,7 +18,10 @@ class MongoStore(object):
         self.collection = self.db[collection]
 
     def __getitem__(self, key):
-        return self.collection.find_one({'key': ind})
+        return self.collection.find_one({'key': key})['value']
+
+    def __delitem__(self, key):
+        self.collection.remove({'key': key})
 
     def __setitem__(self, key, value):
         self.collection.remove({'key': key})

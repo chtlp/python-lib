@@ -17,6 +17,13 @@ def use_agg():
     import matplotlib
     matplotlib.use('agg')
 
+def remove_top_right_bounds():
+    from pylab import gca
+    gca().spines['right'].set_color('none')
+    gca().spines['top'].set_color('none')
+    gca().xaxis.set_ticks_position('bottom')
+    gca().yaxis.set_ticks_position('left')
+
 def logspace2(start, stop, num=50, endpoint=True):
     """
     logspace points between [start, stop]
