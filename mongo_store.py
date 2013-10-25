@@ -9,12 +9,13 @@ class MongoStore(object):
     def __init__(self, collection, host='localhost', port=27017,
                  db='python-mongo-store'):
 
-        self.client = MongoClient(host, 27017)
+        self.host, self.port, self.db_name, self.collection_name = \
+            host, port, db, collection
+        self.client = MongoClient(host,port)
 
         # get a database
         self.db = self.client[db]
         # get a collection
-        self.collection_name = collection
         self.collection = self.db[collection]
 
     def __getitem__(self, key):
@@ -32,6 +33,17 @@ class MongoStore(object):
         for o in self.collection.find():
             d[o['key']] = o['value']
         return d
+
+    def backup(self, new_collection_name):
+        '''
+        backup to another collection
+        '''
+        other_store = MongoStore(
+            new_collection_name,
+            self.host, self.port, self.db_name)
+        for k, v in self.to_dict().iteritems():
+            other_store[k] = v
+        return other_store
 
     def __str__(self):
         return pformat(self.to_dict())
