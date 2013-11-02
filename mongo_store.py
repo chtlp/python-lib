@@ -8,7 +8,6 @@ class MongoStore(object):
 
     def __init__(self, collection, host='localhost', port=27017,
                  db='python-mongo-store'):
-
         self.host, self.port, self.db_name, self.collection_name = \
             host, port, db, collection
         self.client = MongoClient(host,port)
